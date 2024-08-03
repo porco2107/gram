@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { supabase } from "@/auth/supabase";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
+import { useNavigate } from "@tanstack/react-router";
 import {
   Form,
   FormControl,
@@ -39,38 +40,45 @@ const Login = () => {
       form.reset({ email: data.email, password: data.password });
     }
   };
+
+  const navigate = useNavigate();
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>パスワード</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">ログイン</Button>
-      </form>
-    </Form>
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>パスワード</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">ログイン</Button>
+        </form>
+      </Form>
+      <Button onClick={() => navigate({ to: "/reset-password" })}>
+        パスワードを忘れた
+      </Button>
+    </>
   );
 };
 
