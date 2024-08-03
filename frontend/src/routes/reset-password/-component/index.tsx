@@ -12,23 +12,23 @@ import {
 } from "../../../components/ui/form";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import {
-  type UpdatePasswordForm,
-  PasswordSchema,
+  type ResetPasswordForm,
+  ResetPasswordSchema,
 } from "@/components/login/schema";
 
 const ResetPassword = () => {
-  const form = useForm<UpdatePasswordForm>({
+  const form = useForm<ResetPasswordForm>({
     mode: "onBlur",
-    resolver: valibotResolver(PasswordSchema),
+    resolver: valibotResolver(ResetPasswordSchema),
     defaultValues: {
-      password: "",
+      email: "",
     },
   });
-  const onSubmit = async (data: UpdatePasswordForm) => {
+  const onSubmit = async (data: ResetPasswordForm) => {
     try {
-      const password = data.password;
-      const { error } = await supabase.auth.updateUser({
-        password,
+      const email = data.email;
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: "http://localhost:3000/reset-password/forget",
       });
       if (error) {
         throw new Error(error.message);
@@ -36,7 +36,7 @@ const ResetPassword = () => {
     } catch (err) {
       console.log(err);
     } finally {
-      form.reset({ password: data.password });
+      form.reset({ email: data.email });
     }
   };
   return (
@@ -44,10 +44,10 @@ const ResetPassword = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
-          name="password"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>パスワード</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -55,7 +55,7 @@ const ResetPassword = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">登録</Button>
+        <Button type="submit">送信</Button>
       </form>
     </Form>
   );
